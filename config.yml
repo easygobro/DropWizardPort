@@ -1,0 +1,8 @@
+server:
+  rootPath: /api/*
+
+
+logging:
+  level: INFO
+  loggers:
+    com.mvc: DEBUG
