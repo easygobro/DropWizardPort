@@ -9,5 +9,8 @@
         <module name="dropwizardport" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="DropWizardPort" target="19" />
+    </bytecodeTargetLevel>
   </component>
 </project>

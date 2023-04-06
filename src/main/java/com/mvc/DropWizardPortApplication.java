@@ -1,14 +1,14 @@
 package com.mvc;
 
 import com.codahale.metrics.health.HealthCheck;
-import com.mvc.resources.EventResource;
+import com.mvc.health.TemplateHealthCheck;
 import com.mvc.resources.HelloWorldResource;
 import io.dropwizard.Application;
+import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 public class DropWizardPortApplication extends Application<DropWizardPortConfiguration> {
 
@@ -23,23 +23,21 @@ public class DropWizardPortApplication extends Application<DropWizardPortConfigu
 
     @Override
     public void initialize(final Bootstrap<DropWizardPortConfiguration> bootstrap) {
-        // TODO: application initialization
+        bootstrap.addBundle((ConfiguredBundle<? super DropWizardPortConfiguration>) new AssetsBundle("/assets/", "/"));
     }
 
     @Override
-    public void run(final DropWizardPortConfiguration configuration,
-                    final Environment environment) {
-        DateFormat eAppDateFormat = new SimpleDateFormat(configuration.getDateFormat());
-        environment.getObjectMapper().setDateFormat(eAppDateFormat);
-        environment.jersey().register(new EventResource());
-        environment.jersey().register(new HelloWorldResource());
+    public void run(DropWizardPortConfiguration configuration,
+                    Environment environment) {
+        final HelloWorldResource resource = new HelloWorldResource(
+                configuration.getTemplate(),
+                configuration.getDefaultName()
+        );
 
-        environment.healthChecks().register("dropwizardport", new HealthCheck() {
-            @Override
-            protected Result check() throws Exception {
-                return Result.healthy();
-            }
-        });
+        final TemplateHealthCheck healthCheck =
+                new TemplateHealthCheck(configuration.getTemplate());
+        environment.healthChecks().register("template", healthCheck);
+
+        environment.jersey().register(resource);
     }
-
 }
