@@ -1,7 +1,7 @@
 package com.mvc.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.mvc.api.Saying;
+import mvc.api.Saying;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,13 +17,11 @@ public class HelloWorldResource {
     private final String template;
     private final String defaultName;
     private final AtomicLong counter;
-
     public HelloWorldResource(String template, String defaultName) {
         this.template = template;
         this.defaultName = defaultName;
         this.counter = new AtomicLong();
     }
-
     @GET
     @Timed
     public Saying sayHello(@QueryParam("name") Optional<String> name) {

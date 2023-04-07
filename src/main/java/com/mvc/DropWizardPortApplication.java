@@ -1,14 +1,11 @@
 package com.mvc;
 
-import com.codahale.metrics.health.HealthCheck;
 import com.mvc.health.TemplateHealthCheck;
 import com.mvc.resources.HelloWorldResource;
 import io.dropwizard.Application;
-import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-
 
 public class DropWizardPortApplication extends Application<DropWizardPortConfiguration> {
 
@@ -18,26 +15,26 @@ public class DropWizardPortApplication extends Application<DropWizardPortConfigu
 
     @Override
     public String getName() {
-        return "DropWizardPort";
+        return "hello-world";
     }
 
     @Override
     public void initialize(final Bootstrap<DropWizardPortConfiguration> bootstrap) {
-        bootstrap.addBundle((ConfiguredBundle<? super DropWizardPortConfiguration>) new AssetsBundle("/assets/", "/"));
+        AssetsBundle assetsBundle = new AssetsBundle("/assests/", "/", "index.html");
+        bootstrap.addBundle(assetsBundle);
     }
 
     @Override
-    public void run(DropWizardPortConfiguration configuration,
-                    Environment environment) {
+    public void run(final DropWizardPortConfiguration configuration,
+                    final Environment environment) {
         final HelloWorldResource resource = new HelloWorldResource(
                 configuration.getTemplate(),
                 configuration.getDefaultName()
         );
-
         final TemplateHealthCheck healthCheck =
                 new TemplateHealthCheck(configuration.getTemplate());
         environment.healthChecks().register("template", healthCheck);
-
         environment.jersey().register(resource);
     }
+
 }
