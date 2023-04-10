@@ -1,0 +1,6 @@
+com/mvc/dropwizardportApplication.class
+com/mvc/api/User.class
+com/mvc/dropwizardportConfiguration.class
+com/mvc/db/UserDB.class
+com/mvc/resources/UserService.class
+com/mvc/health/UserHealthCheck.class
